@@ -1,7 +1,7 @@
 # DarkBox: A Platform for Project Hosting & Developer Collaboration
 
 <p align="center">
-  <img src="https://via.placeholder.com/500x200?text=DarkBox" alt="DarkBox logo">
+  <img src="darkbox.jpg" width="200" alt="DarkBox logo">
 </p>
 
 ### 🚀 **About DarkBox**
