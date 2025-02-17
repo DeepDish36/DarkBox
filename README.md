@@ -73,7 +73,7 @@ For more information, please contact me via email at andredeepgomes@gmail.com.
 ---
 
 ### 🔗 **Follow Us on Social Media**
-- [Discord](https://discord.gg/kQEKP7G5)
+- [Discord (in development)](https://discord.gg/kQEKP7G5)
 
 <br>
 If you liked it, don't forget to leave a ⭐ in the repository!
