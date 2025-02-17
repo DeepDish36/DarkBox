@@ -1,0 +1,148 @@
+-- 1️⃣ Tabela de Planos de Assinatura
+CREATE TABLE SubscriptionPlans (
+    PlanID INT PRIMARY KEY IDENTITY(1,1),
+    PlanName NVARCHAR(50) UNIQUE NOT NULL,
+    Price DECIMAL(10,2) NOT NULL,
+    MaxProjects INT NOT NULL,
+    StorageLimitMB DECIMAL(10,2) NOT NULL,
+    SupportLevel NVARCHAR(20) CHECK (SupportLevel IN ('basic', 'priority', 'premium')) NOT NULL
+);
+
+-- 2️⃣ Inserir Planos de Assinatura
+INSERT INTO SubscriptionPlans (PlanName, Price, MaxProjects, StorageLimitMB, SupportLevel) VALUES
+('Free', 0.00, 1, 500, 'basic'),
+('Pro', 15.00, 5, 5000, 'priority'),
+('Enterprise', 29.00, NULL, 15000, 'premium'); -- NULL para ilimitado
+
+-- 3️⃣ Tabela de Users
+CREATE TABLE Users (
+    UserID INT PRIMARY KEY IDENTITY(1,1),
+    Username NVARCHAR(50) UNIQUE NOT NULL,
+    Email NVARCHAR(100) UNIQUE NOT NULL,
+    PasswordHash NVARCHAR(255) NOT NULL,
+    Role NVARCHAR(20) CHECK (Role IN ('client', 'developer', 'admin')) DEFAULT 'client',
+    ThemePreference NVARCHAR(10) CHECK (ThemePreference IN ('light', 'dark')) DEFAULT 'light',
+    SubscriptionPlanID INT,
+    StorageUsedMB DECIMAL(10,2) DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (SubscriptionPlanID) REFERENCES SubscriptionPlans(PlanID)
+);
+
+-- 4️⃣ Tabela de Categorias de Projetos
+CREATE TABLE ProjectCategories (
+    CategoryID INT PRIMARY KEY IDENTITY(1,1),
+    CategoryName NVARCHAR(50) UNIQUE NOT NULL
+);
+
+-- 5️⃣ Tabela de Projetos
+CREATE TABLE Projects (
+    ProjectID INT PRIMARY KEY IDENTITY(1,1),
+    ClientID INT NOT NULL,
+    DeveloperID INT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description TEXT NOT NULL,
+    Status NVARCHAR(20) CHECK (Status IN ('pending', 'in_progress', 'completed', 'cancelled')) DEFAULT 'pending',
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ClientID) REFERENCES Users(UserID),
+    FOREIGN KEY (DeveloperID) REFERENCES Users(UserID)
+);
+
+-- 6️⃣ Tabela de Pedidos de Projetos
+CREATE TABLE ProjectRequests (
+    RequestID INT PRIMARY KEY IDENTITY(1,1),
+    ClientID INT NOT NULL,
+    RequestedTitle NVARCHAR(255) NOT NULL,
+    RequestedDescription TEXT NOT NULL,
+    Status NVARCHAR(20) CHECK (Status IN ('pending', 'accepted', 'rejected')) DEFAULT 'pending',
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ClientID) REFERENCES Users(UserID)
+);
+
+-- 7️⃣ Tabela de Atribuição de Categorias aos Projetos
+CREATE TABLE ProjectCategoryAssignments (
+    ProjectID INT NOT NULL,
+    CategoryID INT NOT NULL,
+    PRIMARY KEY (ProjectID, CategoryID),
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+    FOREIGN KEY (CategoryID) REFERENCES ProjectCategories(CategoryID)
+);
+
+-- 8️⃣ Tabela de Arquivos (para armazenamento de projetos)
+CREATE TABLE ProjectFiles (
+    FileID INT PRIMARY KEY IDENTITY(1,1),
+    ProjectID INT NOT NULL,
+    UploadedBy INT NOT NULL,
+    FileName NVARCHAR(255) NOT NULL,
+    FileSizeMB DECIMAL(10,2) NOT NULL,
+    FilePath NVARCHAR(500) NOT NULL,
+    UploadedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+    FOREIGN KEY (UploadedBy) REFERENCES Users(UserID)
+);
+
+-- 9️⃣ Tabela de Comentários/Avaliações nos Projetos
+CREATE TABLE ProjectComments (
+    CommentID INT PRIMARY KEY IDENTITY(1,1),
+    ProjectID INT NOT NULL,
+    UserID INT NOT NULL,
+    CommentText TEXT NOT NULL,
+    Rating INT CHECK (Rating BETWEEN 1 AND 5) NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- 🔟 Tabela de Atualizações de Projeto (Progresso)
+CREATE TABLE ProjectUpdates (
+    UpdateID INT PRIMARY KEY IDENTITY(1,1),
+    ProjectID INT NOT NULL,
+    DeveloperID INT NOT NULL,
+    UpdateText TEXT NOT NULL,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID),
+    FOREIGN KEY (DeveloperID) REFERENCES Users(UserID)
+);
+
+-- 1️⃣1️⃣ Tabela de Pagamentos (Futuro, por enquanto sem transações reais)
+CREATE TABLE Payments (
+    PaymentID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    PlanID INT NOT NULL,
+    Amount DECIMAL(10,2) NOT NULL,
+    PaymentDate DATETIME DEFAULT GETDATE(),
+    Status NVARCHAR(20) CHECK (Status IN ('pending', 'completed', 'failed')) DEFAULT 'pending',
+    FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    FOREIGN KEY (PlanID) REFERENCES SubscriptionPlans(PlanID)
+);
+
+-- 1️⃣2️⃣ Tabela de Mensagens (Chat entre Cliente e Programador)
+CREATE TABLE Messages (
+    MessageID INT PRIMARY KEY IDENTITY(1,1),
+    SenderID INT NOT NULL,
+    ReceiverID INT NOT NULL,
+    ProjectID INT NOT NULL,
+    MessageText TEXT NOT NULL,
+    SentAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (SenderID) REFERENCES Users(UserID),
+    FOREIGN KEY (ReceiverID) REFERENCES Users(UserID),
+    FOREIGN KEY (ProjectID) REFERENCES Projects(ProjectID)
+);
+
+-- 1️⃣3️⃣ Tabela de Notificações
+CREATE TABLE Notifications (
+    NotificationID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    NotificationText TEXT NOT NULL,
+    IsRead BIT DEFAULT 0,
+    CreatedAt DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
+
+-- 1️⃣4️⃣ Tabela de Histórico de Atividades
+CREATE TABLE ActivityHistory (
+    ActivityID INT PRIMARY KEY IDENTITY(1,1),
+    UserID INT NOT NULL,
+    ActionDescription TEXT NOT NULL,
+    ActionDate DATETIME DEFAULT GETDATE(),
+    FOREIGN KEY (UserID) REFERENCES Users(UserID)
+);
