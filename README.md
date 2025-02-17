@@ -39,19 +39,43 @@ DarkBox is a platform designed for **hosting programming projects** and **connec
 1. Clone the repository:
    ```bash
    git clone https://github.com/DeepDish36/darkbox.git
-
-2. Install dependencies (ASP.NET, SQL Server setup, etc.)
-
-3. Start the application:
+   ```
+2. Install dependencies
+    ```
+    (ASP.NET, SQL Server setup, etc.)
+    ```
+5. Start the application:
     ```bash
     dotnet run
+    ```
+---
 
 ### 🎨 **Contributors**
 - Gomes (Creator of DarkBox)
-- Want to be a contributor? Contact me
+- Want your name on this list? Contribute now 
+
+---
+
+### 🤝 **How to Contribute or Collaborate**
+If you're interested in contributing to DarkBox or would like to collaborate in the future, feel free to reach out to me directly! You can contact me through:
+
+- **Email**: andredeepgomes@gmail.com
+- **GitHub Issues**: Feel free to open an issue for suggestions or collaboration ideas.
+- **Discord**: Join our [server](https://discord.gg/kQEKP7G5) and reach out in the `#collaborations` channel.
+
+Every contribution, big or small, is highly appreciated!
+
+---
   
 ### 📞 **Contact Us**
 For more information, please contact me via email at andredeepgomes@gmail.com.
 
+---
+
 ### 🔗 **Follow Us on Social Media**
-- [Discord](discord.com)
+- [Discord](https://discord.gg/kQEKP7G5)
+
+<br>
+If you liked it, don't forget to leave a ⭐ in the repository!
+<br>
+<div align="right">Made by: The DarkBox Team © | On 2025</div>
