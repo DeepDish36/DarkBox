@@ -1,4 +1,7 @@
-﻿<!doctype html>
+﻿@{
+    Layout = null;
+}
+<!doctype html>
 <html lang="en" class="h-100" data-bs-theme="auto">
 <head>
     <script src="~/js/color-modes.js"></script>
@@ -35,7 +38,6 @@
         }
 
         }
-
 
         .b-example-divider {
             width: 100%;
@@ -102,7 +104,7 @@
 
 
     <!-- Custom styles for this template -->
-    <link href="cover.css" rel="stylesheet">
+    <link href="~/css/cover.css" rel="stylesheet">
 </head>
 <body class="d-flex h-100 text-center text-bg-dark">
     <svg xmlns="http://www.w3.org/2000/svg" class="d-none">
@@ -178,7 +180,7 @@
             <h1>DarkBox</h1>
             <p class="lead">Soluções simples e eficientes para organizar as tuas tarefas e colaborares com a tua equipa</p>
             <p class="lead">
-                <a href="#" class="btn btn-lg btn-light fw-bold border-white bg-white">Iniciar Sessão</a>
+                <a asp-action="Login" asp-controller="Login" class="btn btn-lg btn-light fw-bold border-white bg-white">Iniciar Sessão</a>
             </p>
         </main>
 
@@ -253,5 +255,6 @@
         </footer>
     </div>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
