@@ -1,0 +1,209 @@
+﻿@page
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarkBox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1f26;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin-top: 100px;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: #121417;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+
+        .cta-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+            .cta-container input {
+                width: 250px;
+                padding: 10px;
+                border-radius: 5px;
+                border: none;
+            }
+
+            .cta-container .btn {
+                padding: 10px 20px;
+                border-radius: 5px;
+            }
+
+        .info-section {
+            margin-top: 100px;
+            padding: 50px;
+            background-color: #2a2d35;
+            border-radius: 10px;
+        }
+
+        .feature {
+            margin-bottom: 30px;
+        }
+
+        .navbar {
+            padding: 0.5rem 1rem;
+        }
+
+        .navbar-brand, .nav-link {
+            font-size: 0.9rem;
+        }
+
+        .separator {
+            margin: 50px 0;
+            border-top: 1px solid #444;
+        }
+
+        .productivity-section {
+            margin-top: 50px;
+            text-align: left;
+        }
+
+            .productivity-section h2 {
+                margin-bottom: 20px;
+            }
+
+            .productivity-section p {
+                margin-bottom: 40px;
+            }
+
+        .productivity-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .productivity-box {
+            background-color: #2a2d35;
+            padding: 20px;
+            border-radius: 10px;
+            flex: 1;
+        }
+
+            .productivity-box.large {
+                flex: 2;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-box mb-1" viewBox="0 0 16 16">
+                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
+                </svg>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="#">Planos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+                </ul>
+                <div class="d-flex">
+                    <a asp-controller="Login" asp-action="Login" class="btn btn-outline-light me-2">Login</a>
+                    <a asp-controller="CriarConta" asp-action="Register" class="btn btn-outline-light me-2">Criar Conta</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="container">
+        <h1>DarkBox</h1>
+        <p>Soluções simples e eficientes para organizar as tuas tarefas e colaborares com a tua equipa.</p>
+
+        <!-- Input de email + botões "Criar Conta" e "Experimente o Cipher" -->
+        <div class="cta-container">
+            <input type="email" placeholder="Introduza o seu email" class="form-control">
+            <a asp-controller="CriarConta" asp-action="CriarConta" class="btn btn-success">Criar Conta</a>
+            <a href="#" class="btn btn-outline-light">Experimente o Cipher</a>
+        </div>
+    </div>
+
+    <!-- Informações sobre o programa -->
+    <div class="container info-section">
+        <h2>Por que escolher o DarkBox?</h2>
+
+        <div class="feature">
+            <h4>📂 Gestão de Projetos</h4>
+            <p>Organize os seus projetos de forma simples e eficiente com ferramentas poderosas.</p>
+        </div>
+
+        <div class="feature">
+            <h4>🛠️ Colaboração em Tempo Real</h4>
+            <p>Trabalhe com a sua equipa e compartilhe arquivos em um ambiente seguro.</p>
+        </div>
+
+        <div class="feature">
+            <h4>🔒 Segurança Avançada</h4>
+            <p>Os seus dados estão protegidos com criptografia de ponta a ponta.</p>
+        </div>
+    </div>
+
+    <!-- Separador -->
+    <div class="separator"></div>
+
+    <!-- Aumente a sua produtividade -->
+    <div class="container productivity-section">
+        <h2 class="text-center">Aumente a sua produtividade</h2>
+        <p class="text-center">Com o Cipher, você pode otimizar suas tarefas e melhorar a colaboração com sua equipe.</p>
+
+        <div class="productivity-container d-flex justify-content-center" style="max-width: 900px; margin: 0 auto;">
+            <!-- Caixa grande à esquerda -->
+            <div class="productivity-box large" style="max-width: 500px;">
+                <h4>🔍 Ferramentas de Pesquisa Avançada</h4>
+                <p>Encontre rapidamente os arquivos e projetos que você precisa com nossas ferramentas de pesquisa avançada.</p>
+                <a asp-action="" asp-controller="">Explore o Cipher</a>
+            </div>
+
+            <!-- Coluna da direita com duas caixas empilhadas -->
+            <div class="d-flex flex-column gap-3" style="max-width: 350px;">
+                <div class="productivity-box">
+                    <h4>📊 Análises Detalhadas</h4>
+                    <p>Obtenha insights detalhados sobre o desempenho de seus projetos e tome decisões informadas.</p>
+                </div>
+                <div class="productivity-box">
+                    <h4>🌐 Integração com Outros Serviços</h4>
+                    <p>Conecte o Cipher com outras ferramentas que você já usa para um fluxo de trabalho mais eficiente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Footer -->
+    <footer class="footer text-center text-light">
+        <p>&copy; 2025 DarkBox, Inc. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
+

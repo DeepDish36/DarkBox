@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model EditarProjetoViewModel
+
+<div class="container mt-4">
+    <h2 class="text-center">📝 Editar Projeto</h2>
+
+    <form action="@Url.Action("Editar", "Projetos", new { id = Model.ProjectId })" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="Title">Título do Projeto</label>
+            <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required />
+        </div>
+
+        <div class="form-group">
+            <label for="Description">Descrição do Projeto</label>
+            <textarea class="form-control" id="Description" name="Description" rows="4" required>@Model.Description</textarea>
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-success">Salvar Alterações</button>
+            <a href="@Url.Action("Detalhes", "Projetos", new { id = Model.ProjectId })" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>

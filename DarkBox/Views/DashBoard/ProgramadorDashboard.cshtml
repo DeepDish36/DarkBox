@@ -1,0 +1,79 @@
+﻿@{
+    var projetos = ViewBag.Projetos as List<Project>;
+}
+
+<div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h5 class="mt-4">📁 Seus Projetos</h5>
+        @if (projetos != null && projetos.Count > 0)
+        {
+            <div class="projetos-container">
+                @foreach (var projeto in projetos)
+                {
+                    <div class="card text-white shadow-sm">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@projeto.Title</h5>
+                            <p class="card-text text-truncate" title="@projeto.Description">@projeto.Description</p>
+                            <div class="mt-auto">
+                                <a href="@Url.Action("Detalhes", "Projetos", new { id = projeto.ProjectId })" class="btn btn-dark btn-sm w-100">
+                                    📂 Ver detalhes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-dark text-center" role="alert">
+                <p class="mb-2">Você ainda não tem projetos.</p>
+                <a href="@Url.Action("CriarProjeto", "Projetos")" class="btn btn-primary btn-sm">➕ Criar Novo Projeto</a>
+            </div>
+        }
+    </div>
+
+    <!-- Conteúdo da View -->
+    <div class="content">
+        <h2>Bem-vindo ao seu Dashboard, Programador!</h2>
+        <p>Aqui estão os seus projetos atuais:</p>
+
+        @if (projetos != null && projetos.Count > 0)
+        {
+            <div class="projetos-container">
+                @foreach (var projeto in projetos)
+                {
+                    <div class="card text-white shadow-sm">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@projeto.Title</h5>
+                            <p class="card-text text-truncate" title="@projeto.Description">@projeto.Description</p>
+                            <div class="mt-auto">
+                                <a href="@Url.Action("Detalhes", "Projetos", new { id = projeto.ProjectId })" class="btn btn-dark btn-sm w-100">
+                                    📂 Ver detalhes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-dark text-center" role="alert">
+                <p class="mb-2">Você ainda não tem projetos para trabalhar.</p>
+                <a href="@Url.Action("CriarProjeto", "Projetos")" class="btn btn-primary btn-sm">➕ Criar Novo Projeto</a>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- Script para remover a última linha separadora -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let dividers = document.querySelectorAll(".dropdown-divider");
+        if (dividers.length > 0) {
+            dividers[dividers.length - 1].remove();
+        }
+    });
+</script>

@@ -1,0 +1,36 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model ClienteDashboardViewModel
+
+@{
+    ViewData["Title"] = "Dashboard do Cliente";
+}
+
+<div class="card text-white bg-dark mb-4">
+    <div class="card-body">
+        <h3 class="card-title">Bem-vindo, @Model.NomeUsuario!</h3>
+        <p class="card-text">Aqui estão seus projetos e notificações.</p>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>O seu armazenamento</h4>
+    <div class="progress" style="height: 15px; width:250px">
+        <!-- Diminui a altura da barra de progresso -->
+        @{
+            var percentualUso = (Model.ArmazenamentoUsadoMB / Model.ArmazenamentoTotalMB) * 100;
+        }
+        <div class="progress-bar bg-info text-dark d-flex align-items-center justify-content-center"
+             role="progressbar"
+             style="width: @percentualUso%; font-size: 12px; white-space: nowrap;" <!-- Diminui o tamanho da fonte -->
+             aria-valuenow="@percentualUso"
+             aria-valuemin="0"
+             aria-valuemax="100">
+            @String.Format("{0:0.00}", percentualUso)% - @Model.ArmazenamentoUsadoMB MB de @Model.ArmazenamentoTotalMB MB
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    var projetos = ViewBag.Projetos as List<Project>;
+}
+@model DarkBox.Models.ProjetoDetalhesViewModel
+
+<div class="container mt-4">
+    <h2 class="text-center">📁 Projeto #@Model.ProjectID</h2>
+    <p>Criado em: @Model.UploadedAt.ToString("dd/MM/yyyy")</p>
+
+    <div class="card p-4">
+        <h4>📜 README</h4>
+        <div class="border p-3 bg-light text-black" id="readme-container">@Html.Raw(Model.ReadmeHtml)</div>
+    </div>
+
+    <h4 class="mt-4">📂 Arquivos do Projeto</h4>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Tamanho</th>
+                <th>Data de Envio</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var arquivo in Model.Arquivos)
+            {
+                <tr>
+                    <td>@arquivo.FileName</td>
+                    <td>@arquivo.FileSizeMb MB</td>
+                    <td>@(arquivo.UploadedAt.HasValue ? arquivo.UploadedAt.Value.ToString("dd/MM/yyyy") : "Data não disponível")</td>
+                    <td>
+                        <a href="@arquivo.FilePath" class="btn btn-primary btn-sm">Baixar</a>
+                        <a href="@Url.Action("ExcluirArquivo", "Projetos", new { id = arquivo.FileId })" class="btn btn-danger btn-sm">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Editar", "Projetos", new { id = Model.ProjectID })" class="btn btn-warning">✏ Editar Projeto</a>
+        <form method="post" asp-action="Excluir" asp-route-id="@Model.ProjectID" onsubmit="return confirm('Tem certeza que deseja excluir este projeto?')">
+            <button type="submit" class="btn btn-danger">🗑 Excluir Projeto</button>
+        </form>
+        <a href="@Url.Action("ClienteDashboard", "Dashboard")" class="btn btn-secondary">🔙 Voltar</a>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script>
+    // Converter README para Markdown (se necessário)
+    document.addEventListener("DOMContentLoaded", function() {
+        let readmeContent = document.getElementById("readme-container").innerText;
+        document.getElementById("readme-container").innerHTML = marked.parse(readmeContent);
+    });
+</script>
+
+
