@@ -14,6 +14,6 @@ public class EditarProjetoViewModel
     public string Description { get; set; }
 
     public DateTime? UploadedAt { get; set; }
-
+    public List<Project> Projetos { get; set; } = new();
     public List<Notification> Notificacoes { get; set; } = new();
 }

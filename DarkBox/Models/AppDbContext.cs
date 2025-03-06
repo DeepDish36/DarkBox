@@ -187,7 +187,6 @@ public partial class AppDbContext : DbContext
                 .OnDelete(DeleteBehavior.Cascade);  // Adicionando a exclusão em cascata para os arquivos
         });
 
-
         modelBuilder.Entity<ProjectCategory>(entity =>
         {
             entity.HasKey(e => e.CategoryId).HasName("PK__ProjectC__19093A2B46178F85");

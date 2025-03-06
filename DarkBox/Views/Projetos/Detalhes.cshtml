@@ -41,7 +41,7 @@
         </tbody>
     </table>
 
-    <div class="mt-4">
+    <div class="mt-4 d-flex justify-content-between">
         <a href="@Url.Action("Editar", "Projetos", new { id = Model.ProjectID })" class="btn btn-warning">✏ Editar Projeto</a>
         <form method="post" asp-action="Excluir" asp-route-id="@Model.ProjectID" onsubmit="return confirm('Tem certeza que deseja excluir este projeto?')">
             <button type="submit" class="btn btn-danger">🗑 Excluir Projeto</button>

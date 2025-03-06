@@ -8,7 +8,8 @@
 <div class="container mt-4">
     <h2 class="text-center">📝 Editar Projeto</h2>
 
-    <form action="@Url.Action("Editar", "Projetos", new { id = Model.ProjectId })" method="post" enctype="multipart/form-data">
+    <form asp-action="Editar" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="ProjectId" />
         <div class="form-group">
             <label for="Title">Título do Projeto</label>
             <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required />
@@ -25,3 +26,4 @@
         </div>
     </form>
 </div>
+

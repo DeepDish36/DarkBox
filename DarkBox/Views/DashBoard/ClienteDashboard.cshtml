@@ -6,6 +6,13 @@
 @model ClienteDashboardViewModel
 
 @{
+     var armazenamentoTotalMB = Model.PlanoAssinatura switch
+    {
+        "Enterprise" => 15000m,
+        "Pro" => 5000m,
+        _ => 500m // Plano Free
+    };
+
     ViewData["Title"] = "Dashboard do Cliente";
 }
 
@@ -23,13 +30,15 @@
         @{
             var percentualUso = (Model.ArmazenamentoUsadoMB / Model.ArmazenamentoTotalMB) * 100;
         }
-        <div class="progress-bar bg-info text-dark d-flex align-items-center justify-content-center"
-             role="progressbar"
-             style="width: @percentualUso%; font-size: 12px; white-space: nowrap;" <!-- Diminui o tamanho da fonte -->
-             aria-valuenow="@percentualUso"
-             aria-valuemin="0"
-             aria-valuemax="100">
-            @String.Format("{0:0.00}", percentualUso)% - @Model.ArmazenamentoUsadoMB MB de @Model.ArmazenamentoTotalMB MB
+        <div class="progress" style="height: 15px; width:250px">
+            <div class="progress-bar bg-info text-dark d-flex align-items-center justify-content-center"
+                 role="progressbar"
+                 style="width: @percentualUso%; font-size: 12px; white-space: nowrap;"
+                 aria-valuenow="@percentualUso"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
+                <p>@String.Format("{0:0.00}", percentualUso)% - @Model.ArmazenamentoUsadoMB MB de @armazenamentoTotalMB MB</p>
+            </div>
         </div>
     </div>
 </div>

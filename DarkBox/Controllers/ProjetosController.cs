@@ -135,6 +135,8 @@ namespace DarkBox.Controllers
 
             if (projeto == null)
             {
+                // Adicione um log para ajudar na depuração
+                Console.WriteLine($"Projeto não encontrado. ProjectId: {model.ProjectId}, ClientId: {userId}");
                 return NotFound();
             }
 
