@@ -1,5 +1,5 @@
 ﻿@{
-    var projetos = ViewBag.Projetos as List<Project>;
+    var users = ViewBag.Users as List<User>;
 }
 <!DOCTYPE html>
 <html lang="pt">
@@ -17,6 +17,53 @@
             background: #2a2d35;
             color: white;
             margin: 0;
+        }
+
+        #chatContainer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            font-family: Arial, sans-serif;
+        }
+
+        #chatHeader {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 10px 10px 0 0;
+        }
+
+        #chatBox {
+            display: none;
+            padding: 10px;
+        }
+
+        #messages {
+            height: 200px;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        input {
+            width: 80%;
+            padding: 5px;
+        }
+
+        button {
+            width: 18%;
+            padding: 5px;
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
         }
 
         h1, h2, h3, h4, h5, h6, p {
@@ -200,6 +247,26 @@
             }
         </div>
 
+        <div id="chatContainer">
+            <div id="chatHeader" onclick="toggleChat()">💬 Chat</div>
+            <div id="chatBox">
+                <div id="messages"></div>
+                <input type="text" id="userSearch" placeholder="Pesquisar usuário..." oninput="filterUsers()" />
+                <select id="userSelect">
+                    <option value="">Selecione um usuário</option>
+                    @if (users != null)
+                    {
+                        @foreach (var user in users)
+                        {
+                            <option value="@user.UserId">@user.Username</option>
+                        }
+                    }
+                </select>
+                <input type="text" id="messageInput" placeholder="Escreve a tua mensagem..." />
+                <button onclick="sendMessage()">Enviar</button>
+            </div>
+        </div>
+
         <!-- Conteúdo da View -->
         <div class="content">
             @RenderBody()
@@ -207,7 +274,57 @@
     </div>
 
     <!-- Script para remover a última linha separadora -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
+            const connection = new signalR.HubConnectionBuilder()
+                .withUrl("/chatHub")
+                .build();
+
+            connection.start().catch(err => console.error(err.toString()));
+
+            function toggleChat() {
+                var chatBox = document.getElementById("chatBox");
+                chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+            }
+
+            function sendMessage() {
+                var messageInput = document.getElementById("messageInput");
+                var message = messageInput.value;
+                var user = "@User.Identity.Name"; // Nome do usuário autenticado
+                var userSelect = document.getElementById("userSelect");
+                var recipientId = userSelect.value;
+
+                if (recipientId) {
+                    connection.invoke("SendMessage", user, message, recipientId).catch(err => console.error(err.toString()));
+                    messageInput.value = "";
+                } else {
+                    alert("Por favor, selecione um usuário para enviar a mensagem.");
+                }
+            }
+
+            function filterUsers() {
+                var input, filter, select, options, i;
+                input = document.getElementById("userSearch");
+                filter = input.value.toUpperCase();
+                select = document.getElementById("userSelect");
+                options = select.getElementsByTagName("option");
+                for (i = 0; i < options.length; i++) {
+                    var txtValue = options[i].textContent || options[i].innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        options[i].style.display = "";
+                    } else {
+                        options[i].style.display = "none";
+                    }
+                }
+            }
+
+            connection.on("ReceiveMessage", function (user, message) {
+                var msgContainer = document.getElementById("messages");
+                var newMessage = document.createElement("div");
+                newMessage.textContent = user + ": " + message;
+                msgContainer.appendChild(newMessage);
+            });
+
         document.addEventListener("DOMContentLoaded", function () {
             let dividers = document.querySelectorAll(".dropdown-divider");
             if (dividers.length > 0) {
@@ -215,6 +332,5 @@
             }
         });
     </script>
-
 </body>
 </html>

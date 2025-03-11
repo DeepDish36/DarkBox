@@ -1,0 +1,171 @@
+﻿@{
+    Layout = null;
+}
+<!doctype html>
+<html lang="en" data-bs-theme="auto">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pricing - DarkBox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1f26;
+            color: white;
+        }
+
+        .navbar a {
+            color: white;
+        }
+
+        .card {
+            background-color: #1c1f26;
+            color: white;
+        }
+
+        .card-header {
+            background-color: #2a2e37;
+        }
+
+        .custom-table {
+            background-color: #1c1f26;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-3">
+        <header class="border-bottom mb-4">
+            <div class="d-flex flex-column flex-md-row align-items-center">
+                <a asp-action="Index" asp-controller="Home" class="d-flex align-items-center text-decoration-none">
+                    <h3 class="fw-bold text-white">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-box mb-1" viewBox="0 0 16 16">
+                            <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
+                        </svg>
+                        DarkBox
+                    </h3>
+                </a>
+                <nav class="ms-md-auto navbar">
+                    <a class="me-3 py-2 text-decoration-none" href="#">Features</a>
+                    <a class="me-3 py-2 text-decoration-none" href="#">Enterprise</a>
+                    <a class="me-3 py-2 text-decoration-none" href="#">Support</a>
+                    <a class="py-2 text-decoration-none" href="#">Pricing</a>
+                </nav>
+            </div>
+        </header>
+
+        <main>
+            <div class="text-center mb-5">
+                <h1 class="display-4">Planos de subscrição</h1>
+                <p class="lead">Escolha o plano que mais se adequa a si!</p>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+                <div class="col">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0">Free</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title">€0<small>/mês</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>1 projeto</li>
+                                <li>500MB de armazenamento</li>
+                                <li>Suporte básico</li>
+                            </ul>
+                            <a asp-action="CriarConta" asp-controller="CriarConta" class="btn btn-outline-primary w-100">Sign up</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header py-3">
+                            <h4 class="my-0">Pro</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title">€15<small>/mês</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>5 projetos</li>
+                                <li>5GB de armazenamento</li>
+                                <li>Suporte prioritário</li>
+                            </ul>
+                            <button class="btn btn-primary w-100">Get started</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card mb-4 shadow-sm border-primary">
+                        <div class="card-header py-3 text-bg-primary border-primary">
+                            <h4 class="my-0">Enterprise</h4>
+                        </div>
+                        <div class="card-body">
+                            <h1 class="card-title">€29<small>/mês</small></h1>
+                            <ul class="list-unstyled mt-3 mb-4">
+                                <li>Projetos ilimitados</li>
+                                <li>15GB de armazenamento</li>
+                                <li>Suporte premium</li>
+                            </ul>
+                            <button class="btn btn-primary w-100">Contact us</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table text-center custom-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 34%;"></th>
+                            <th style="width: 22%;">Free</th>
+                            <th style="width: 22%;">Pro</th>
+                            <th style="width: 22%;">Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-start">Preço</th>
+                            <td>0€</td>
+                            <td>15€</td>
+                            <td>29€</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Nº de projetos</th>
+                            <td>1</td>
+                            <td>5</td>
+                            <td>Ilimitado</td>
+                        </tr>
+                    </tbody>
+                    <tbody>
+                        <tr>
+                            <th scope="row" class="text-start">Armazenamento</th>
+                            <td>500MB</td>
+                            <td>5GB</td>
+                            <td>15GB</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Suporte</th>
+                            <td>Básico</td>
+                            <td>Prioritário</td>
+                            <td>Premium</td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Mensagens privadas</th>
+                            <td><svg class="bi" width="24" height="24"><use xlink:href="#check" /></svg></td>
+                            <td><svg class="bi" width="24" height="24"><use xlink:href="#check" /></svg></td>
+                            <td><svg class="bi" width="24" height="24"><use xlink:href="#check" /></svg></td>
+                        </tr>
+                        <tr>
+                            <th scope="row" class="text-start">Extra security</th>
+                            <td></td>
+                            <td></td>
+                            <td><svg class="bi" width="24" height="24"><use xlink:href="#check" /></svg></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

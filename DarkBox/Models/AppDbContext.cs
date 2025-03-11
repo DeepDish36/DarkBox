@@ -21,6 +21,8 @@ public partial class AppDbContext : DbContext
 
     public virtual DbSet<Notification> Notifications { get; set; }
 
+    public virtual DbSet<PasswordResets> PasswordResets { get; set; }
+
     public virtual DbSet<Payment> Payments { get; set; }
 
     public virtual DbSet<Project> Projects { get; set; }
@@ -107,30 +109,53 @@ public partial class AppDbContext : DbContext
                 .HasConstraintName("FK__Notificat__UserI__75A278F5");
         });
 
+        modelBuilder.Entity<PasswordResets>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Password__D3A3E3F1");
+
+            entity.ToTable("PasswordResets");
+
+            entity.Property(e => e.Id)
+                .HasColumnName("Id")
+                .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Token)
+                .IsRequired()
+                .HasMaxLength(255)
+                .IsUnicode(false);
+
+            entity.Property(e => e.Expiration)
+                .HasColumnType("datetime");
+
+            entity.Property(e => e.UserID)
+                .HasColumnName("UserID")
+                .IsRequired();
+        });
+
         modelBuilder.Entity<Payment>(entity =>
         {
-            entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58E6DCB0B6");
+        entity.HasKey(e => e.PaymentId).HasName("PK__Payments__9B556A58E6DCB0B6");
 
-            entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
-            entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.PaymentDate)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.PlanId).HasColumnName("PlanID");
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .HasDefaultValue("pending");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+        entity.Property(e => e.PaymentId).HasColumnName("PaymentID");
+        entity.Property(e => e.Amount).HasColumnType("decimal(10, 2)");
+        entity.Property(e => e.PaymentDate)
+            .HasDefaultValueSql("(getdate())")
+            .HasColumnType("datetime");
+        entity.Property(e => e.PlanId).HasColumnName("PlanID");
+        entity.Property(e => e.Status)
+            .HasMaxLength(20)
+            .HasDefaultValue("pending");
+        entity.Property(e => e.UserId).HasColumnName("UserID");
 
-            entity.HasOne(d => d.Plan).WithMany(p => p.Payments)
-                .HasForeignKey(d => d.PlanId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payments__PlanID__6B24EA82");
+        entity.HasOne(d => d.Plan).WithMany(p => p.Payments)
+            .HasForeignKey(d => d.PlanId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK__Payments__PlanID__6B24EA82");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Payments)
-                .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__Payments__UserID__6A30C649");
+        entity.HasOne(d => d.User).WithMany(p => p.Payments)
+            .HasForeignKey(d => d.UserId)
+            .OnDelete(DeleteBehavior.ClientSetNull)
+            .HasConstraintName("FK__Payments__UserID__6A30C649");
         });
 
         modelBuilder.Entity<Project>(entity =>
