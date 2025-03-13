@@ -1,0 +1,83 @@
+﻿@{
+    ViewBag.Title = "Recuperar Senha";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - DarkBox</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1f26; /* Cinzento escuro */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            background: #2a2d35;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            background: #333;
+            color: white;
+            border: none;
+        }
+
+            .form-control::placeholder {
+                color: #ccc;
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .alert {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3 class="mb-3">Recuperar Senha</h3>
+
+        @if (ViewBag.Mensagem != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Mensagem</div>
+        }
+        else
+        {
+            <form method="post" asp-action="EnviarLinkRecuperacao">
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="Email" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Enviar Link</button>
+            </form>
+        }
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

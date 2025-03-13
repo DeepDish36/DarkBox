@@ -1,7 +1,9 @@
 ﻿using DarkBox.Models;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace DarkBox.Hubs
 {
@@ -14,33 +16,54 @@ namespace DarkBox.Hubs
             _context = context;
         }
 
-        public async Task SendMessage(string user, string message, int recipientId)
+        // 📌 Enviar Mensagem para um Usuário Específico
+        public async Task SendMessage(string senderUsername, string message, int recipientId, int? projectId = null)
         {
-            var sender = _context.Users.FirstOrDefault(u => u.Username == user);
+            var sender = _context.Users.FirstOrDefault(u => u.Username == senderUsername);
+
             if (sender == null)
             {
-                throw new Exception("Sender not found");
+                Console.WriteLine($"Erro: Remetente {senderUsername} não encontrado no banco de dados.");
+                throw new Exception("Remetente não encontrado.");
             }
 
             var recipient = _context.Users.FirstOrDefault(u => u.UserId == recipientId);
             if (recipient == null)
             {
-                throw new Exception("Recipient not found");
+                throw new Exception("Destinatário não encontrado.");
             }
 
-            var newMessage = new Message
+            var chatMessage = new Message
             {
                 SenderId = sender.UserId,
                 ReceiverId = recipient.UserId,
                 MessageText = message,
-                SentAt = DateTime.UtcNow
+                SentAt = DateTime.UtcNow,
+                ProjectId = projectId  // Definir o ProjectId se fornecido
             };
 
-            _context.Messages.Add(newMessage);
+            _context.Messages.Add(chatMessage);
             await _context.SaveChangesAsync();
 
-            await Clients.User(recipient.UserId.ToString()).SendAsync("ReceiveMessage", user, message);
+            await Clients.User(recipientId.ToString()).SendAsync("ReceiveMessage", senderUsername, message);
+        }
+
+        // 📌 Buscar Usuários em Tempo Real
+        public async Task SearchUsers(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                await Clients.Caller.SendAsync("ReceiveUserResults", new List<object>());
+                return;
+            }
+
+            var users = _context.Users
+                .Where(u => u.Username.Contains(searchTerm) || u.Email.Contains(searchTerm))
+                .Select(u => new { u.UserId, u.Username, u.Email })
+                .Take(10)  // Limita para evitar sobrecarga
+                .ToList();
+
+            await Clients.Caller.SendAsync("ReceiveUserResults", users);
         }
     }
 }
-

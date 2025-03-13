@@ -89,8 +89,6 @@ namespace DarkBox.Controllers
             return View();
         }
 
-
-
         [HttpPost]
         public IActionResult RedefinirSenha(string token, string NovaSenha, string ConfirmarSenha)
         {
@@ -111,8 +109,8 @@ namespace DarkBox.Controllers
                 return View("ErroToken");
             }
 
-            // Busca o cliente e redefine a senha
-            var user = _context.Users.FirstOrDefault(c => c.UserId == resetEntry.Id);
+            // Busca o usuário e redefine a senha
+            var user = _context.Users.FirstOrDefault(c => c.UserId == resetEntry.UserID);
             if (user == null || string.IsNullOrEmpty(user.Email))
             {
                 TempData["Erro"] = "Erro ao processar a solicitação. Tente novamente.";
@@ -122,17 +120,9 @@ namespace DarkBox.Controllers
             // 🔐 Gerar hash da nova senha
             string senhaHash = BCrypt.Net.BCrypt.HashPassword(NovaSenha);
 
-            // Atualiza a senha na tabela Clientes
+            // Atualiza a senha na tabela Users
             user.PasswordHash = senhaHash;
             _context.Users.Update(user);
-
-            // 🔥 Agora também altera na tabela Users
-            var users = _context.Users.FirstOrDefault(u => u.Username == user.Username);
-            if (users != null)
-            {
-                users.PasswordHash = senhaHash;
-                _context.Users.Update(user);
-            }
 
             // Remove o token após o uso
             _context.PasswordResets.Remove(resetEntry);
@@ -141,7 +131,6 @@ namespace DarkBox.Controllers
             ViewBag.Mensagem = "Senha redefinida com sucesso! Agora podes fazer login.";
             return RedirectToAction("Login", "Login");
         }
-
 
         private void EnviarEmail(string destinatario, string assunto, string mensagem)
         {

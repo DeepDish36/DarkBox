@@ -1,0 +1,47 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "E-mail de recuperação enviado";
+}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - DarkBox</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1f26;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .confirmation-container {
+            background: #2a2d35;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            width: 300px;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <h2>E-mail enviado!</h2>
+        <p>Se o e-mail estiver cadastrado, enviamos um link para redefinir a senha.</p>
+        <p>Verifique sua caixa de entrada e clique no link para continuar.</p>
+        <a href="@Url.Action("Login", "Conta")" class="btn btn-primary">Voltar ao Login</a>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

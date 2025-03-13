@@ -19,15 +19,18 @@
             margin: 0;
         }
 
+        /* Estilização do Chat */
         #chatContainer {
             position: fixed;
             bottom: 20px;
             right: 20px;
             width: 300px;
             border-radius: 10px;
-            background: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            background: #1e1e1e;
+            color: white;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
             font-family: Arial, sans-serif;
+            overflow: hidden;
         }
 
         #chatHeader {
@@ -36,6 +39,7 @@
             padding: 10px;
             text-align: center;
             cursor: pointer;
+            font-weight: bold;
             border-radius: 10px 10px 0 0;
         }
 
@@ -45,30 +49,75 @@
         }
 
         #messages {
-            height: 200px;
+            height: 250px;
             overflow-y: auto;
-            border-bottom: 1px solid #ddd;
-            padding-bottom: 10px;
+            border-bottom: 1px solid #444;
+            padding: 10px;
             margin-bottom: 10px;
+            background: #2a2d35;
+            border-radius: 5px;
+        }
+
+        .message {
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+
+        .sent {
+            background: #007bff;
+            color: white;
+            align-self: flex-end;
+            text-align: right;
+        }
+
+        .received {
+            background: #444;
+            align-self: flex-start;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border: none;
+            border-radius: 5px;
         }
 
         input {
-            width: 80%;
-            padding: 5px;
+            background: #333;
+            color: white;
         }
 
         button {
-            width: 18%;
-            padding: 5px;
             background: #007bff;
             color: white;
-            border: none;
             cursor: pointer;
         }
 
-        h1, h2, h3, h4, h5, h6, p {
-            color: white;
+            button:hover {
+                background: #0056b3;
+            }
+
+        #userResults {
+            max-height: 150px;
+            overflow-y: auto;
+            background: #2a2d35;
+            border-radius: 5px;
+            margin-top: 5px;
         }
+
+        .user-item {
+            padding: 8px;
+            border-bottom: 1px solid #444;
+            cursor: pointer;
+        }
+
+            .user-item:hover {
+                background: #007bff;
+            }
 
         /* Navbar fixa no topo */
         .navbar {
@@ -250,22 +299,14 @@
         <div id="chatContainer">
             <div id="chatHeader" onclick="toggleChat()">💬 Chat</div>
             <div id="chatBox">
+                <input type="text" id="userSearch" placeholder="Pesquisar usuário..." oninput="searchUsers()" />
+                <div id="userResults"></div> <!-- Aqui vão aparecer os resultados da pesquisa -->
                 <div id="messages"></div>
-                <input type="text" id="userSearch" placeholder="Pesquisar usuário..." oninput="filterUsers()" />
-                <select id="userSelect">
-                    <option value="">Selecione um usuário</option>
-                    @if (users != null)
-                    {
-                        @foreach (var user in users)
-                        {
-                            <option value="@user.UserId">@user.Username</option>
-                        }
-                    }
-                </select>
                 <input type="text" id="messageInput" placeholder="Escreve a tua mensagem..." />
                 <button onclick="sendMessage()">Enviar</button>
             </div>
         </div>
+
 
         <!-- Conteúdo da View -->
         <div class="content">
@@ -276,61 +317,89 @@
     <!-- Script para remover a última linha separadora -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
-            const connection = new signalR.HubConnectionBuilder()
+        const connection = new signalR.HubConnectionBuilder()
                 .withUrl("/chatHub")
                 .build();
 
-            connection.start().catch(err => console.error(err.toString()));
+            let selectedUserId = null;
 
+            // Conectar ao SignalR
+            connection.start()
+                .then(() => console.log("Conectado ao SignalR!"))
+                .catch(err => console.error("Erro ao conectar:", err));
+
+            // Pesquisar usuários em tempo real
+            function searchUsers() {
+                let searchTerm = document.getElementById("userSearch").value;
+                if (searchTerm.length < 1) {
+                    document.getElementById("userResults").innerHTML = "";
+                    return;
+                }
+
+                connection.invoke("SearchUsers", searchTerm).catch(err => console.error(err.toString()));
+            }
+
+            // Atualizar lista de usuários pesquisados
+            connection.on("ReceiveUserResults", function (users) {
+                let resultsDiv = document.getElementById("userResults");
+                resultsDiv.innerHTML = "";
+                users.forEach(user => {
+                    let userElement = document.createElement("div");
+                    userElement.textContent = user.username;
+                    userElement.classList.add("user-item");
+                    userElement.onclick = () => selectUser(user.userId, user.username);
+                    resultsDiv.appendChild(userElement);
+                });
+            });
+
+            // Selecionar usuário para conversar
+            function selectUser(userId, username) {
+                selectedUserId = userId;
+                document.getElementById("userSearch").value = username;
+                document.getElementById("userResults").innerHTML = "";
+            }
+
+            // Enviar mensagem para o usuário selecionado
+                    function sendMessage() {
+                let message = document.getElementById("messageInput").value.trim();
+                let sender = "@User.Identity.Name"; // Obtém o nome do usuário autenticado do Razor
+                let projectId = null; // Defina o projectId se necessário
+
+                if (!selectedUserId || message === "") {
+                    alert("Escolha um usuário e escreva uma mensagem.");
+                    return;
+                }
+
+                connection.invoke("SendMessage", sender, message, selectedUserId, projectId)
+                    .then(() => {
+                        document.getElementById("messageInput").value = "";
+                        displayMessage(sender, message, "sent"); // Exibir mensagem enviada no chat
+                    })
+                    .catch(err => console.error("Erro ao enviar mensagem:", err));
+            }
+
+
+            // Exibir mensagens no chat
+            function displayMessage(sender, message, type) {
+                let messagesDiv = document.getElementById("messages");
+                let messageElement = document.createElement("div");
+                messageElement.textContent = sender + ": " + message;
+                messageElement.classList.add("message", type);
+                messagesDiv.appendChild(messageElement);
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Rolar para a última mensagem
+            }
+
+            // Receber mensagens
+            connection.on("ReceiveMessage", function (sender, message) {
+                displayMessage(sender, message, "received");
+            });
+
+            // Alternar visibilidade do chat
             function toggleChat() {
-                var chatBox = document.getElementById("chatBox");
+                let chatBox = document.getElementById("chatBox");
                 chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
             }
 
-            function sendMessage() {
-                var messageInput = document.getElementById("messageInput");
-                var message = messageInput.value;
-                var user = "@User.Identity.Name"; // Nome do usuário autenticado
-                var userSelect = document.getElementById("userSelect");
-                var recipientId = userSelect.value;
-
-                if (recipientId) {
-                    connection.invoke("SendMessage", user, message, recipientId).catch(err => console.error(err.toString()));
-                    messageInput.value = "";
-                } else {
-                    alert("Por favor, selecione um usuário para enviar a mensagem.");
-                }
-            }
-
-            function filterUsers() {
-                var input, filter, select, options, i;
-                input = document.getElementById("userSearch");
-                filter = input.value.toUpperCase();
-                select = document.getElementById("userSelect");
-                options = select.getElementsByTagName("option");
-                for (i = 0; i < options.length; i++) {
-                    var txtValue = options[i].textContent || options[i].innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        options[i].style.display = "";
-                    } else {
-                        options[i].style.display = "none";
-                    }
-                }
-            }
-
-            connection.on("ReceiveMessage", function (user, message) {
-                var msgContainer = document.getElementById("messages");
-                var newMessage = document.createElement("div");
-                newMessage.textContent = user + ": " + message;
-                msgContainer.appendChild(newMessage);
-            });
-
-        document.addEventListener("DOMContentLoaded", function () {
-            let dividers = document.querySelectorAll(".dropdown-divider");
-            if (dividers.length > 0) {
-                dividers[dividers.length - 1].remove();
-            }
-        });
     </script>
 </body>
 </html>

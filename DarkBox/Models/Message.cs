@@ -11,13 +11,13 @@ public partial class Message
 
     public int ReceiverId { get; set; }
 
-    public int ProjectId { get; set; }
+    public int? ProjectId { get; set; }
 
     public string MessageText { get; set; } = null!;
 
     public DateTime? SentAt { get; set; }
 
-    public virtual Project Project { get; set; } = null!;
+    public virtual Project? Project { get; set; } = null!;
 
     public virtual User Receiver { get; set; } = null!;
 

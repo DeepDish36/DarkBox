@@ -1,0 +1,97 @@
+﻿@{
+    ViewData["Title"] = "Redefinir Senha";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - DarkBox</title>
+    <link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+        body {
+            background-color: #1c1f26; /* Cinzento escuro */
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .card {
+            background: #2a2d35;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-control {
+            background: #333;
+            border: 1px solid #555;
+            color: white;
+        }
+
+            .form-control:focus {
+                background: #444;
+                color: white;
+                border-color: #777;
+            }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            font-size: 16px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
+        .alert {
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3 class="mb-3">Redefinir Senha</h3>
+
+        @if (ViewBag.Mensagem != null)
+        {
+            <div class="alert alert-danger text-center">@ViewBag.Mensagem</div>
+        }
+
+        <form method="post" asp-action="RedefinirSenha">
+            <input type="hidden" name="token" value="@ViewBag.Token" />
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="Email" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nova Senha</label>
+                <input type="password" name="NovaSenha" class="form-control" required />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Confirmar Senha</label>
+                <input type="password" name="ConfirmarSenha" class="form-control" required />
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Redefinir Senha</button>
+        </form>
+    </div>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+

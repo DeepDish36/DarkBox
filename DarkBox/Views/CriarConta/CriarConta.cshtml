@@ -125,13 +125,19 @@
     </style>
 </head>
 <body>
-
     <div class="container-signup">
 
         <!-- Formulário de Cadastro -->
         <div class="form-container">
             <h2>Crie a sua conta</h2>
 
+            @* Exibir erros de validação *@
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger">
+                    @Html.ValidationSummary()
+                </div>
+            }
             <form asp-action="CriarConta" asp-controller="CriarConta" method="POST">
                 <div class="mb-3">
                     <label class="form-label">Nome</label>
