@@ -206,43 +206,25 @@
             </a>
 
             <!-- Adicione a barra de pesquisa na navbar -->
-            <form class="d-flex" role="search">
-                <input id="searchInput" class="form-control me-2" type="search" placeholder="Pesquisar utilizadores ou projetos..." aria-label="Search">
-                <button class="btn btn-outline-light" type="button" onclick="search()">🔍</button>
+            <form action="@Url.Action("Search", "Search")" method="GET" class="d-flex">
+                <input id="searchInput" name="query" class="form-control me-2" type="search" placeholder="Pesquisar utilizadores ou projetos..." aria-label="Search" required>
+                <button class="btn btn-outline-light" type="submit">🔍</button>
             </form>
+
 
             <div class="ms-3">
                 <ul class="navbar-nav">
                     <!-- Ícone de Notificações -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle position-relative" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle position-relative" href="#" id="notificationDropdown" role="button" data-bs-toggle="dropdown">
                             🔔
-                            @if (Model?.Notificacoes?.Count > 0)
-                            {
-                                <span class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill">
-                                    @Model.Notificacoes.Count
-                                </span>
-                            }
+                            <span id="notificationBadge" class="badge bg-danger position-absolute top-0 start-100 translate-middle rounded-pill" style="display:none;">0</span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            @if (Model?.Notificacoes != null && Model.Notificacoes.Count > 0)
-                            {
-                                foreach (var notificacao in Model.Notificacoes)
-                                {
-                                    <li>
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <span class="me-2">🔔</span> @notificacao.NotificationText
-                                        </a>
-                                    </li>
-                                    <li><hr class="dropdown-divider"></li>
-                                }
-                            }
-                            else
-                            {
-                                <li><a class="dropdown-item text-muted">Nenhuma notificação</a></li>
-                            }
+                        <ul class="dropdown-menu dropdown-menu-end" id="notificationList">
+                            <li><a class="dropdown-item text-muted">Nenhuma notificação</a></li>
                         </ul>
                     </li>
+
 
                     <!-- Perfil do Usuário -->
                     <li class="nav-item dropdown">
@@ -253,6 +235,7 @@
                             <li><a class="dropdown-item" href="#">O seu perfil</a></li>
                             <li><a class="dropdown-item" href="#">Os seus projetos</a></li>
                             <li><a class="dropdown-item" href="#">O seu armazenamento</a></li>
+                            <li><a class="dropdown-item" asp-action="NovoPedido" asp-controller="ProjectRequest">Fazer pedido</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Assinatura</a></li>
                             <li><a class="dropdown-item" href="#">Tema</a></li>
@@ -317,6 +300,33 @@
     <!-- Script para remover a última linha separadora -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
     <script>
+        function search() {
+            let query = document.getElementById("searchInput").value.trim();
+            if (query.length < 2) return;
+
+            fetch(`/api/search?query=${query}`)
+                .then(response => response.json())
+                .then(data => {
+                    let resultsContainer = document.getElementById("searchResults");
+                    resultsContainer.innerHTML = "";
+
+                    if (data.users.length === 0 && data.projects.length === 0) {
+                        resultsContainer.innerHTML = "<p>Nenhum resultado encontrado.</p>";
+                        return;
+                    }
+
+                    data.users.forEach(user => {
+                        let userItem = `<p>👤 <a href='/user/${user.id}'>${user.userName}</a></p>`;
+                        resultsContainer.innerHTML += userItem;
+                    });
+
+                    data.projects.forEach(project => {
+                        let projectItem = `<p>📂 <a href='/project/${project.id}'>${project.name}</a></p>`;
+                        resultsContainer.innerHTML += projectItem;
+                    });
+                });
+        }
+
         const connection = new signalR.HubConnectionBuilder()
                 .withUrl("/chatHub")
                 .build();

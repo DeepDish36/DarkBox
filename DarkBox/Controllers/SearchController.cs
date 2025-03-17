@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DarkBox.Controllers
 {
-    [ApiController]
-    [Route("api/search")]
     public class SearchController : Controller
     {
         private readonly AppDbContext _context;
@@ -15,22 +13,29 @@ namespace DarkBox.Controllers
         }
 
         [HttpGet]
-        public IActionResult Search([FromQuery] string query)
+        public IActionResult Search(string query)
         {
-            if (string.IsNullOrEmpty(query))
-                return BadRequest("A pesquisa não pode estar vazia.");
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return View(new PesquisaViewModel { Users = new List<User>(), Projetos = new List<Project>() });
+            }
 
-            var users = _context.Users
-                .Where(u => u.Username.Contains(query))
-                .Select(u => new { u.UserId, u.Username})
+            var usuarios = _context.Users
+                .Where(u => u.Username.Contains(query) || u.Email.Contains(query))
                 .ToList();
 
-            var projects = _context.Projects
-                .Where(p => p.Title.Contains(query))
-                .Select(p => new { p.ProjectId, p.Title })
+            var projetos = _context.Projects
+                .Where(p => p.Title.Contains(query) || p.Description.Contains(query))
                 .ToList();
 
-            return Ok(new { users, projects });
+            var viewModel = new PesquisaViewModel
+            {
+                Users = usuarios,
+                Projetos = projetos,
+                Query = query
+            };
+
+            return View(viewModel);
         }
     }
 }

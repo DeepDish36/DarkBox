@@ -1,0 +1,34 @@
+﻿using DarkBox.Hubs;
+using DarkBox.Models;
+using Microsoft.AspNetCore.SignalR;
+using System.Threading.Tasks;
+
+namespace DarkBox.Services
+{
+    public class NotificationService
+    {
+        private readonly AppDbContext _context;
+        private readonly IHubContext<NotificationsHub> _hubContext;
+
+        public NotificationService(AppDbContext context, IHubContext<NotificationsHub> hubContext)
+        {
+            _context = context;
+            _hubContext = hubContext;
+        }
+
+        public async Task SendNotification(int userId, string message)
+        {
+            var notification = new Notification
+            {
+                UserId = userId,
+                NotificationText = message
+            };
+
+            _context.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message);
+        }
+    }
+
+}

@@ -1,0 +1,57 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model PesquisaViewModel
+
+@{
+    ViewData["Title"] = "Resultados da Pesquisa";
+}
+
+<div class="container mt-4">
+    <h2>Resultados para: "@Model.Query"</h2>
+
+    <hr>
+
+    <h3>👤 Utilizadores</h3>
+    @if (Model.Users.Any())
+    {
+        <ul class="list-group mb-4">
+            @foreach (var usuario in Model.Users)
+            {
+                <li class="list-group-item bg-dark text-white">
+                    <a href="@Url.Action("Perfil", "User", new { id = usuario.UserId })" class="text-decoration-none text-light">
+                        @usuario.Username (@usuario.Email)
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else
+    {
+        <p class="text-muted text-white">Nenhum utilizador encontrado.</p>
+    }
+
+    <h3>📂 Projetos</h3>
+    @if (Model.Projetos.Any())
+    {
+        <div class="row">
+            @foreach (var projeto in Model.Projetos)
+            {
+                <div class="col-md-4">
+                    <div class="card bg-dark text-white mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@projeto.Title</h5>
+                            <p class="card-text">@projeto.Description</p>
+                            <a href="@Url.Action("Detalhes", "Projetos", new { id = projeto.ProjectId })" class="btn btn-primary">Ver detalhes</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-muted text-white">Nenhum projeto encontrado.</p>
+    }
+</div>
+

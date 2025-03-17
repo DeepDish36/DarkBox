@@ -47,6 +47,13 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<NotificationsHub>("/notificationHub");
+});
+
+
 app.MapHub<ChatHub>("/chatHub");
+
 
 app.Run();
