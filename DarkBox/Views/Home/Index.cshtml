@@ -122,7 +122,7 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" asp-controller="Pricing" asp-action="Pricing">Planos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Sobre</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Contato</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="About">Contato</a></li>
                 </ul>
                 <div class="d-flex">
                     <a asp-controller="Login" asp-action="Login" class="btn btn-outline-light me-2">Login</a>
@@ -195,6 +195,106 @@
         </div>
     </div>
 
+    <div class="separator"></div>
+
+    <div class="container info-section">
+        <h2>Contato e Suporte</h2>
+        <p>Entre em contato com nossa equipe para suporte e dúvidas.</p>
+        <form>
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <input type="text" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mensagem</label>
+                <textarea class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Enviar</button>
+        </form>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- Depoimentos de Usuários -->
+    <div class="container mt-5">
+        <h2 class="text-center">O que nossos utilizadores dizem</h2>
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card bg-dark text-light p-3 border-0">
+                    <p>"O DarkBox revolucionou a forma como minha equipe trabalha. Muito seguro e eficiente!"</p>
+                    <h5 class="mt-3">🔹 João Mendes</h5>
+                    <small>Gestor de Projetos</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-light p-3 border-0">
+                    <p>"A criptografia avançada me dá total confiança para compartilhar arquivos sensíveis."</p>
+                    <h5 class="mt-3">🔹 Mariana Rocha</h5>
+                    <small>Analista de Segurança</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-dark text-light p-3 border-0">
+                    <p>"Ótima ferramenta para organizar tarefas e colaborar com minha equipe de forma simples."</p>
+                    <h5 class="mt-3">🔹 Carlos Oliveira</h5>
+                    <small>Empreendedor</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="separator"></div>
+
+    <!-- Perguntas Frequentes (FAQ) -->
+    <div class="container mt-5">
+        <h2 class="text-center">Perguntas Frequentes</h2>
+        <div class="accordion mt-4" id="faqAccordion">
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                        Como posso criar uma conta na DarkBox?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Basta clicar no botão "Criar Conta", preencher os seus dados e desfrutar da aplicação.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                        A DarkBox tem versão gratuita?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Sim! Temos um plano gratuito com funcionalidades básicas e planos premium para usuários avançados.
+                    </div>
+                </div>
+            </div>
+
+            <div class="accordion-item">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                        Os meus dados estão seguros na DarkBox?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                        Sim! Utilizamos criptografia de ponta a ponta para garantir a segurança total dos seus dados.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
     <!-- Footer -->

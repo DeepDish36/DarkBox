@@ -205,10 +205,10 @@
                 DarkBox
             </a>
 
-            <!-- Barra de pesquisa -->
-            <form class="d-flex me-3" action="@Url.Action("PesquisarProjetos", "Dashboard")" method="get">
-                <input class="form-control me-2" type="search" name="query" placeholder="Pesquisar projetos..." aria-label="Search">
-                <button class="btn btn-outline-light" type="submit">🔍</button>
+            <!-- Adicione a barra de pesquisa na navbar -->
+            <form class="d-flex" role="search">
+                <input id="searchInput" class="form-control me-2" type="search" placeholder="Pesquisar utilizadores ou projetos..." aria-label="Search">
+                <button class="btn btn-outline-light" type="button" onclick="search()">🔍</button>
             </form>
 
             <div class="ms-3">

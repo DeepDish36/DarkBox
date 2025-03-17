@@ -1,0 +1,112 @@
+﻿@page
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nós - DarkBox</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #1c1f26;
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .team-member {
+            background: #2a2d35;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 250px;
+            flex: 1 1 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+            .team-member h4 {
+                margin-bottom: 10px;
+            }
+
+        .footer {
+            margin-top: 50px;
+            padding: 20px;
+            background: #121417;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-box mb-1" viewBox="0 0 16 16">
+                    <path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5 8 5.961 14.154 3.5zM15 4.239l-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464z" />
+                </svg>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Início</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Pricing">Planos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/Contact">Contato</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Seção Sobre Nós -->
+    <div class="container">
+        <h1>Sobre o DarkBox</h1>
+        <p>O DarkBox foi criado para ajudar equipes e indivíduos a organizarem suas tarefas e projetos de forma eficiente e segura.</p>
+
+        <br />
+        <h3>Nossa Missão</h3>
+        <p>Facilitar a colaboração e aumentar a produtividade através de uma plataforma moderna e intuitiva.</p>
+
+        <h3>Nosso Time</h3>
+        <div class="team-container">
+            <div class="team-member">
+                <h4>Gomes</h4>
+                <p>CEO & Fundador</p>
+            </div>
+            <div class="team-member">
+                <h4>Gomes</h4>
+                <p>CTO & Desenvolvedor</p>
+            </div>
+            <div class="team-member">
+                <h4>Gomes</h4>
+                <p>Designer UX/UI</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer text-center text-light">
+        <p>&copy; 2025 DarkBox, Inc. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
