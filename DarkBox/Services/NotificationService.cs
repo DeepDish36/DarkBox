@@ -21,13 +21,13 @@ namespace DarkBox.Services
             var notification = new Notification
             {
                 UserId = userId,
-                NotificationText = message
+                NotificationText = message,
+                CreatedAt = DateTime.Now,
+                IsRead = false
             };
 
             _context.Notifications.Add(notification);
             await _context.SaveChangesAsync();
-
-            await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message);
         }
     }
 }

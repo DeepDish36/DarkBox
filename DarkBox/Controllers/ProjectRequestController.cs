@@ -51,15 +51,9 @@ namespace DarkBox.Controllers
             _context.ProjectRequests.Add(request);
             await _context.SaveChangesAsync();
 
-            // Criar uma notificação para o programador
-            // Buscar todos os programadores
-            var programadores = await _context.Users
-                .Where(u => u.Role == "Programador")
-                .ToListAsync();
-
             // Buscar o cliente
             var cliente = await _context.Users
-                .FirstOrDefaultAsync(u => u.UserId == userId); // ✅ Retorna UM único usuário
+                .FirstOrDefaultAsync(u => u.UserId == userId);
 
             if (cliente == null)
             {
@@ -68,16 +62,22 @@ namespace DarkBox.Controllers
             }
 
             // Criar a mensagem da notificação
-            string mensagem = $"{cliente.Username} efetuou um novo pedido."; // ✅ Agora funciona
+            string mensagem = $"{cliente.Username} efetuou um novo pedido.";
+
+            // Buscar todos os programadores
+            var programadores = await _context.Users
+                .Where(u => u.Role == "Programador")
+                .ToListAsync();
 
             // Enviar a notificação para cada programador
             foreach (var programador in programadores)
             {
-                await _notificationsService.SendNotification(userId, mensagem);
+                await _notificationsService.SendNotification(programador.UserId, mensagem);
             }
 
             return RedirectToAction("MeusPedidos"); // Ou outra página de sucesso
         }
+
 
         // Listar os pedidos do usuário
         public IActionResult MeusPedidos()
