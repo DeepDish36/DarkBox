@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using DarkBox.Interfaces;
+using DarkBox.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace DarkBox.Controllers
 {
@@ -29,21 +31,52 @@ namespace DarkBox.Controllers
         [HttpPost]
         public async Task<IActionResult> NovoPedido(ProjectRequest request)
         {
-            if (ModelState.IsValid)
+            if (!User.Identity.IsAuthenticated)
             {
-                _context.ProjectRequests.Add(request);
-                await _context.SaveChangesAsync();
-
-                // Notificação no site
-                await _notificationsService.SendNotification(request.ClientId, "Seu pedido de projeto foi recebido!");
-
-                // Envio de e-mail
-                string emailBody = $"<p>Olá, seu pedido <strong>{request.RequestedTitle}</strong> foi recebido!</p>";
-                await _emailService.SendEmailAsync("email_do_cliente@gmail.com", "Pedido Recebido!", emailBody);
-
-                return RedirectToAction("MeusPedidos");
+                return Unauthorized(); // Garante que o usuário está autenticado
             }
-            return View(request);
+
+            // Pega o ID do usuário logado
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            if (userId == 0)
+            {
+                ModelState.AddModelError("", "Erro ao identificar o usuário.");
+                return View(request);
+            }
+
+            // Define automaticamente o ClientId com o usuário logado
+            request.ClientId = userId;
+            request.CreatedAt = DateTime.Now;
+            _context.ProjectRequests.Add(request);
+            await _context.SaveChangesAsync();
+
+            // Criar uma notificação para o programador
+            // Buscar todos os programadores
+            var programadores = await _context.Users
+                .Where(u => u.Role == "Programador")
+                .ToListAsync();
+
+            // Buscar o cliente
+            var cliente = await _context.Users
+                .FirstOrDefaultAsync(u => u.UserId == userId); // ✅ Retorna UM único usuário
+
+            if (cliente == null)
+            {
+                ModelState.AddModelError("", "Erro ao identificar o cliente.");
+                return View(request);
+            }
+
+            // Criar a mensagem da notificação
+            string mensagem = $"{cliente.Username} efetuou um novo pedido."; // ✅ Agora funciona
+
+            // Enviar a notificação para cada programador
+            foreach (var programador in programadores)
+            {
+                await _notificationsService.SendNotification(userId, mensagem);
+            }
+
+            return RedirectToAction("MeusPedidos"); // Ou outra página de sucesso
         }
 
         // Listar os pedidos do usuário

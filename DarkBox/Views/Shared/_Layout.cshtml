@@ -1,5 +1,6 @@
 ﻿@{
     var users = ViewBag.Users as List<User>;
+    var projetos = ViewBag.Projetos as List<ProjectRequest>;
 }
 <!DOCTYPE html>
 <html lang="pt">
@@ -251,7 +252,7 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h5 class="mt-4">📁 Os seus Projetos</h5>
-            @if (Model?.Projetos != null && Model?.Projetos.Count > 0)
+            @if (projetos != null && projetos.Count > 0)
             {
                 <div class="projetos-container">
                     @foreach (var projeto in Model.Projetos)
@@ -411,5 +412,6 @@
             }
 
     </script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
