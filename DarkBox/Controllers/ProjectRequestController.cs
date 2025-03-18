@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using DarkBox.Services;
+using DarkBox.Interfaces;
 
 namespace DarkBox.Controllers
 {
@@ -10,10 +10,10 @@ namespace DarkBox.Controllers
     public class ProjectRequestController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly INotificationsService _notificationsService; // Adicionado
+        private readonly INotificationService _notificationsService; // Adicionado
         private readonly IEmailService _emailService; // Adicionado
 
-        public ProjectRequestController(AppDbContext context, INotificationsService notificationsService, IEmailService emailService) // Modificado
+        public ProjectRequestController(AppDbContext context, INotificationService notificationsService, IEmailService emailService) // Modificado
         {
             _context = context;
             _notificationsService = notificationsService; // Adicionado

@@ -1,10 +1,12 @@
-﻿using MailKit.Net.Smtp;
+﻿using DarkBox.Interfaces;
+using MailKit.Net.Smtp;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using MimeKit;
 using System.Threading.Tasks;
 
 namespace DarkBox.Services
 {
-    public class EmailService
+    public class EmailService : IEmailService
     {
         private readonly IConfiguration _config;
 

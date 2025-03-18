@@ -3,9 +3,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.SignalR;
 using DarkBox.Models;
 using DarkBox.Hubs;
+using DarkBox.Interfaces;
+using DarkBox.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Importar os serviços de notificação e email
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 //Criar a authentication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -46,12 +51,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<NotificationsHub>("/notificationHub");
-});
-
 
 app.MapHub<ChatHub>("/chatHub");
 

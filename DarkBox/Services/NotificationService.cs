@@ -1,11 +1,11 @@
 ﻿using DarkBox.Hubs;
+using DarkBox.Interfaces;
 using DarkBox.Models;
 using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
 
 namespace DarkBox.Services
 {
-    public class NotificationService
+    public class NotificationService : INotificationService
     {
         private readonly AppDbContext _context;
         private readonly IHubContext<NotificationsHub> _hubContext;
@@ -30,5 +30,4 @@ namespace DarkBox.Services
             await _hubContext.Clients.User(userId.ToString()).SendAsync("ReceiveNotification", message);
         }
     }
-
 }
