@@ -225,8 +225,21 @@
                             <li><a class="dropdown-item text-muted">Nenhuma notificação</a></li>
                         </ul>
                     </li>
-
-
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="pedidosDropdown" role="button" data-bs-toggle="dropdown">Pedidos</a>
+                        <ul class="dropdown-menu dropdown">
+                            <li><a class="dropdown-item" asp-action="NovoPedido" asp-controller="ProjectRequest">Fazer Pedido</a></li>
+                            <li><a class="dropdown-item" asp-action="MeusPedidos" asp-controller="ProjectRequest">Os meus pedidos</a></li>
+                            @if (User.IsInRole("developer"))
+                            {
+                                <li>
+                                    <a class="dropdown-item" asp-controller="ProjectRequest" asp-action="Pendentes">
+                                        📂 Projetos Pendentes
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
                     <!-- Perfil do Usuário -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="perfilDropdown" role="button" data-bs-toggle="dropdown">
@@ -236,7 +249,6 @@
                             <li><a class="dropdown-item" href="#">O seu perfil</a></li>
                             <li><a class="dropdown-item" href="#">Os seus projetos</a></li>
                             <li><a class="dropdown-item" href="#">O seu armazenamento</a></li>
-                            <li><a class="dropdown-item" asp-action="NovoPedido" asp-controller="ProjectRequest">Fazer pedido</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="#">Assinatura</a></li>
                             <li><a class="dropdown-item" href="#">Tema</a></li>
@@ -252,6 +264,7 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h5 class="mt-4">📁 Os seus Projetos</h5>
+            @await Component.InvokeAsync("ProjetosSidebar")
             @if (projetos != null && projetos.Count > 0)
             {
                 <div class="projetos-container">

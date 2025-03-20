@@ -272,25 +272,26 @@ public partial class AppDbContext : DbContext
             entity.Property(e => e.Readme).HasMaxLength(500);
         });
 
+        // Configurar relacionamento entre ProjectRequest e User para Client
         modelBuilder.Entity<ProjectRequest>(entity =>
         {
-            entity.HasKey(e => e.RequestId).HasName("PK__ProjectR__33A8519AEA532DBF");
+            entity.HasKey(pr => pr.RequestId).HasName("PK__ProjectR__E1A0D3E1D3A3D3A3");
+            entity.HasOne(pr => pr.Client)
+            .WithMany(u => u.ProjectRequests)
+            .HasForeignKey(pr => pr.ClientId)
+            .OnDelete(DeleteBehavior.Restrict);
+        });
 
-            entity.Property(e => e.RequestId).HasColumnName("RequestID");
-            entity.Property(e => e.ClientId).HasColumnName("ClientID");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("(getdate())")
-                .HasColumnType("datetime");
-            entity.Property(e => e.RequestedDescription).HasColumnType("text");
-            entity.Property(e => e.RequestedTitle).HasMaxLength(255);
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .HasDefaultValue("pending");
+        // Configurar relacionamento entre ProjectRequest e User para Developer
+        modelBuilder.Entity<ProjectRequest>(entity =>
+        {
+            entity.HasKey(pr => pr.RequestId).HasName("PK__ProjectR__E1A0D3E1D3A3D3A3");
+            entity.HasOne(pr => pr.Developer)
+            .WithMany()
+            .HasForeignKey(pr => pr.DeveloperId)
+            .OnDelete(DeleteBehavior.Restrict);
 
-            entity.HasOne(d => d.Client).WithMany(p => p.ProjectRequests)
-                .HasForeignKey(d => d.ClientId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK__ProjectRe__Clien__5165187F");
+            base.OnModelCreating(modelBuilder);
         });
 
         modelBuilder.Entity<ProjectUpdate>(entity =>

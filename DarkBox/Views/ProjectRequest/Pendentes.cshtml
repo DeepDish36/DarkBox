@@ -1,0 +1,45 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model List<DarkBox.Models.ProjectRequest>
+
+<h2>Projetos Pendentes</h2>
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Título</th>
+            <th>Descrição</th>
+            <th>Data do Pedido</th>
+            <th>Ação</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var projeto in Model)
+        {
+            <tr>
+                <td>@projeto.RequestId</td>
+                <td>@projeto.Client?.Username</td>
+                <td>@projeto.RequestedTitle</td>
+                <td>@projeto.RequestedDescription</td>
+                <td>@projeto.CreatedAt?.ToString("dd/MM/yyyy")</td>
+                <td>
+                    <form method="post" asp-controller="ProjectRequest" asp-action="Aceitar">
+                        <input type="hidden" name="id" value="@projeto.RequestId" />
+                        <button type="submit" class="btn btn-success">✅ Aceitar</button>
+                    </form>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <form method="post" asp-controller="ProjectRequest" asp-action="Recusar">
+                            <input type="hidden" name="id" value="@projeto.RequestId" />
+                            <button type="submit" class="btn btn-danger">❌ Recusar</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

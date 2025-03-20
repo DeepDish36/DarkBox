@@ -21,4 +21,7 @@ public partial class ProjectRequest
     public DateTime? CreatedAt { get; set; }
 
     public virtual User Client { get; set; } = null!;
+
+    public int? DeveloperId { get; set; }
+    public virtual User? Developer { get; set; }
 }

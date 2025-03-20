@@ -78,6 +78,51 @@ namespace DarkBox.Controllers
             return RedirectToAction("MeusPedidos"); // Ou outra página de sucesso
         }
 
+        //Mostrar pedidos pendentes (programador)
+        [HttpGet]
+        public async Task<IActionResult> Pendentes()
+        {
+            var projetosPendentes = await _context.ProjectRequests
+                .Where(p => p.Status == "pending")
+                .Include(p => p.Client) // Para buscar os detalhes do cliente que fez o pedido
+                .ToListAsync();
+
+            return View(projetosPendentes);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Aceitar(int id)
+        {
+            var projeto = await _context.ProjectRequests.FindAsync(id);
+
+            if (projeto == null)
+            {
+                return NotFound();
+            }
+
+            var programadorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            // Atualiza o status e define o programador
+            projeto.Status = "in_progress";
+            projeto.DeveloperId = programadorId;
+
+            await _context.SaveChangesAsync();
+
+            // Buscar o cliente do projeto
+            var cliente = await _context.Users.FindAsync(projeto.ClientId);
+
+            if (cliente != null)
+            {
+                // Enviar notificação via sistema
+                await _notificationsService.SendNotification(cliente.UserId, "Seu projeto foi aceito!");
+
+                // Enviar notificação por email
+                string mensagemEmail = $"Olá {cliente.Username}, o seu projeto '{projeto.RequestedTitle}' foi aceite por um programador!";
+                await _emailService.SendEmailAsync(cliente.Email, "Projeto Aceito", mensagemEmail);
+            }
+
+            return RedirectToAction("Pendentes"); // Redireciona de volta para a lista de pendentes
+        }
 
         // Listar os pedidos do usuário
         public IActionResult MeusPedidos()
