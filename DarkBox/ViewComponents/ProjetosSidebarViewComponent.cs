@@ -1,7 +1,6 @@
-﻿using DarkBox.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using DarkBox.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace DarkBox.ViewComponents
 {
@@ -16,17 +15,9 @@ namespace DarkBox.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            if (!User.Identity.IsAuthenticated)
-            {
-                return View(new List<ProjectRequest>());
-            }
-
-            var userId = int.Parse(((ClaimsIdentity)User.Identity).FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
-
             var projetos = await _context.ProjectRequests
-                .Where(p => p.Status == "in_progress" && p.ClientId == userId)
+                .Where(p => p.Status == "accepted")
                 .ToListAsync();
-
             return View(projetos);
         }
     }

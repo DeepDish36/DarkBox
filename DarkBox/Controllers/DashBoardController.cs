@@ -88,5 +88,33 @@ namespace DarkBox.Controllers
 
             return View(model);
         }
+
+        [Authorize(Roles = "admin")]
+        public async Task<IActionResult> AdminDashboard()
+        {
+            var username = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value ?? "Administrador";
+
+            var totalUsuarios = await _context.Users.CountAsync();
+            var totalProjetos = await _context.ProjectRequests.CountAsync();
+            var projetosPendentes = await _context.ProjectRequests.CountAsync(p => p.Status == "pending");
+            var projetosConcluidos = await _context.ProjectRequests.CountAsync(p => p.Status == "completed");
+
+            var projetos = await _context.ProjectRequests
+                .Include(p => p.Client)
+                .Include(p => p.Developer)
+                .ToListAsync();
+
+            var model = new AdminDashboardViewModel
+            {
+                NomeUsuario = username,
+                TotalUsuarios = totalUsuarios,
+                TotalProjetos = totalProjetos,
+                ProjetosPendentes = projetosPendentes,
+                ProjetosConcluidos = projetosConcluidos,
+                Projetos = projetos
+            };
+
+            return View(model);
+        }
     }
 }

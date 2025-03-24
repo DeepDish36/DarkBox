@@ -1,0 +1,11 @@
+﻿@model IEnumerable<DarkBox.Models.ProjectRequest>
+
+<div class="projetos-sidebar">
+    <h3>Projetos Aceites</h3>
+    <ul>
+        @foreach (var projeto in Model)
+        {
+            <li>@projeto.RequestedTitle</li>
+        }
+    </ul>
+</div>

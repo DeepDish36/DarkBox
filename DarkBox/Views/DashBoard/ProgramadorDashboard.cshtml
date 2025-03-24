@@ -5,7 +5,9 @@
 <div class="d-flex">
     <!-- Sidebar -->
     <div class="sidebar">
-        <h5 class="mt-4">📁 Seus Projetos</h5>
+        <h5 class="mt-4">📁 Os seus Projetos</h5>
+        @await Component.InvokeAsync("ProjetosSidebar")
+        <hr />
         @if (projetos != null && projetos.Count > 0)
         {
             <div class="projetos-container">

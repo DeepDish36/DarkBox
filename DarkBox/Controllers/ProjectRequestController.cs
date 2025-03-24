@@ -103,7 +103,7 @@ namespace DarkBox.Controllers
             var programadorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
 
             // Atualiza o status e define o programador
-            projeto.Status = "in_progress";
+            projeto.Status = "accepted";
             projeto.DeveloperId = programadorId;
 
             await _context.SaveChangesAsync();
@@ -114,11 +114,20 @@ namespace DarkBox.Controllers
             if (cliente != null)
             {
                 // Enviar notificação via sistema
-                await _notificationsService.SendNotification(cliente.UserId, "Seu projeto foi aceito!");
+                await _notificationsService.SendNotification(cliente.UserId, "O seu projeto foi aceite!");
 
-                // Enviar notificação por email
-                string mensagemEmail = $"Olá {cliente.Username}, o seu projeto '{projeto.RequestedTitle}' foi aceite por um programador!";
-                await _emailService.SendEmailAsync(cliente.Email, "Projeto Aceito", mensagemEmail);
+                // Verificar se o email do cliente não é nulo
+                if (!string.IsNullOrEmpty(cliente.Email))
+                {
+                    // Enviar notificação por email
+                    string mensagemEmail = $"Olá {cliente.Username}, o seu projeto '{projeto.RequestedTitle}' foi aceite por um programador!";
+                    await _emailService.SendEmailAsync(cliente.Email, "Projeto Aceito", mensagemEmail);
+                }
+                else
+                {
+                    // Log ou tratamento de erro para email nulo
+                    Console.WriteLine("O email do cliente é nulo. Não foi possível enviar a notificação por email.");
+                }
             }
 
             return RedirectToAction("Pendentes"); // Redireciona de volta para a lista de pendentes

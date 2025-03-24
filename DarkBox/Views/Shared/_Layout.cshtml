@@ -212,7 +212,6 @@
                 <button class="btn btn-outline-light" type="submit">🔍</button>
             </form>
 
-
             <div class="ms-3">
                 <ul class="navbar-nav">
                     <!-- Ícone de Notificações -->
@@ -255,6 +254,10 @@
                             <li><a class="dropdown-item text-danger" href="@Url.Action("Logout", "Login")">Sair</a></li>
                         </ul>
                     </li>
+                    <!-- Botão do Chat -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="chatButton" onclick="toggleChat()">💬 Chat</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -264,7 +267,6 @@
         <!-- Sidebar -->
         <div class="sidebar">
             <h5 class="mt-4">📁 Os seus Projetos</h5>
-            @await Component.InvokeAsync("ProjetosSidebar")
             @if (projetos != null && projetos.Count > 0)
             {
                 <div class="projetos-container">
@@ -293,21 +295,21 @@
             }
         </div>
 
-        <div id="chatContainer">
-            <div id="chatHeader" onclick="toggleChat()">💬 Chat</div>
-            <div id="chatBox">
-                <input type="text" id="userSearch" placeholder="Pesquisar usuário..." oninput="searchUsers()" />
-                <div id="userResults"></div> <!-- Aqui vão aparecer os resultados da pesquisa -->
-                <div id="messages"></div>
-                <input type="text" id="messageInput" placeholder="Escreve a tua mensagem..." />
-                <button onclick="sendMessage()">Enviar</button>
-            </div>
-        </div>
-
-
         <!-- Conteúdo da View -->
         <div class="content">
             @RenderBody()
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div id="chatContainer" style="position: fixed; bottom: 20px; right: 20px; display: none;">
+        <div id="chatHeader" onclick="toggleChat()">💬 Chat</div>
+        <div id="chatBox">
+            <input type="text" id="userSearch" placeholder="Pesquisar usuário..." oninput="searchUsers()" />
+            <div id="userResults"></div> <!-- Aqui vão aparecer os resultados da pesquisa -->
+            <div id="messages"></div>
+            <input type="text" id="messageInput" placeholder="Escreve a tua mensagem..." />
+            <button onclick="sendMessage()">Enviar</button>
         </div>
     </div>
 
@@ -420,8 +422,8 @@
 
             // Alternar visibilidade do chat
             function toggleChat() {
-                let chatBox = document.getElementById("chatBox");
-                chatBox.style.display = chatBox.style.display === "none" ? "block" : "none";
+                let chatContainer = document.getElementById("chatContainer");
+                chatContainer.style.display = chatContainer.style.display === "none" ? "block" : "none";
             }
 
     </script>
