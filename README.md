@@ -78,4 +78,4 @@ For more information, please contact me via email at andredeepgomes@gmail.com.
 <br>
 If you liked it, don't forget to leave a ⭐ in the repository!
 <br>
-<div align="right">Made by: The DarkBox Team © | On 2025</div>
+<div align="right">Made by: The DarkBox Team © | In 2025</div>
